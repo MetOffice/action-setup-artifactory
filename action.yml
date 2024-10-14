@@ -23,6 +23,18 @@ runs:
         password ${{ inputs.api-key }}
         EOF
 
+    - name: Add the conda channel_alias for Artifactory
+      shell: bash
+      run: |
+        CHANNEL_ALIAS_STR="channel_alias: https://metoffice.jfrog.io/metoffice/api/conda"
+
+        if grep "^channel_alias" ~/.condarc 2>/dev/null; then
+            echo "INFO: channel_alias already present in ~/.condarc"
+        else
+            echo "INFO: Adding channel_alias to ~/.condarc"
+            echo ${CHANNEL_ALIAS_STR} >> ~/.condarc
+        fi
+
     - name: Create pip file
       shell: bash
       run: |
