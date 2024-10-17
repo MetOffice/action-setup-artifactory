@@ -4,11 +4,7 @@ Github action to configure connection to Met Office Artifactory for a workflow j
 The action writes the following files to the Github runner to enable
 communication with Artifactory for Python:
 
-* ``~/.netrc`` - Add the provided Artifactory credentials
-* ``~/condarc`` - Add the ``channel_alias`` to point to Artifactory for conda.
-* ``~/.config/pip/pip.conf`` - Add the ``index-url`` to point to Artifactory for pip.
-
-| Filw                       | Reason                                                       |
+|File                        |Reason                                                        |
 | -------------------------- | ------------------------------------------------------------ |
 | ``~/.netrc``               | Add the provided Artifactory credentials                     |
 | ``~/condarc``              | Add the ``channel_alias`` to point to Artifactory for conda. |
