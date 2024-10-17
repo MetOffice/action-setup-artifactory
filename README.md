@@ -4,8 +4,9 @@ Github action to configure connection to Met Office Artifactory for a workflow j
 The action writes the following files to the Github runner to enable
 communication with Artifactory for Python:
 
-* ~/.netrc
-* ~/.config/pip/pip.conf
+* ``~/.netrc`` - Add the provided Artifactory credentials
+* ``~/condarc`` - Add the ``channel_alias`` to point to Artifactory for conda.
+* ``~/.config/pip/pip.conf`` - Add the ``index-url`` to point to Artifactory for pip.
 
 
 Usage
@@ -33,12 +34,12 @@ Configure Artifactory using github secrets `ART_USER` and `ART_KEY`:
 jobs:
   my-job:
     steps:
-    
+
         # Using default secrets for this action, so no need to specify
         # username or api-key
       - name: Set up Artifactory connection
         uses: MetOffice/action-setup-artifactory@v1
-        
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -60,7 +61,7 @@ jobs:
         with:
           username: ${{ secrets.USERNAME }}
           api-key: ${{ secrets.API_KEY }}
-        
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
