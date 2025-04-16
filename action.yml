@@ -52,12 +52,13 @@ runs:
         EOF
 
     - name: Check Artifactory authentication
+      shell: bash
       if: ${{ inputs.check-creds == 'true' }}
       run: |
         echo "Testing authentication to Artifactory"
         # Check  and capture numerical status code
         url="https://metoffice.jfrog.io/metoffice/api/conda/conda-forge"
-        status=$(curl -n -I --write-out %{http_code} --silent --output /dev/null ${url} 
+        status=$(curl -n -I --write-out %{http_code} --silent --output /dev/null ${url}) 
         echo "MO JFrog Artifactory returned: ${status}"
         # if connection and authentication work, then expect a 200 code
         if [ $status != "200" ]; then

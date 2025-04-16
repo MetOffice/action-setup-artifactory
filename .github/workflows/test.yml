@@ -15,8 +15,8 @@ jobs:
       - name: Run action
         uses: MetOffice/action-setup-artifactory@main
         with:
-          username: $ART_USER
-          api-key: $ART_KEY
+          username: ${{ env.ART_USER }}
+          api-key: ${{ env.ART_KEY }}
           check-creds: true
 
       - name: Setup Python
