@@ -88,11 +88,3 @@ jobs:
           if ! grep -e "\<password\> *${{ env.ART_TOKEN }}" ~/.netrc; then
             echo "Missing correct 'password' field from ~/.netrc file."
           fi
-
-#      - name: Setup Python
-#        uses: actions/setup-python@v2
-#        with:
-#          python-version: "3.8"
-#
-#      - name: Install Package
-#        run: pip install cloudteam-pythontools
