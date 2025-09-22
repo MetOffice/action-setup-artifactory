@@ -60,14 +60,6 @@ jobs:
         with:
           api-key: ${{ env.ART_TOKEN }}
 
-      - name: Debug netrc
-        shell: bash
-        run: |
-          echo "Contents of netrc file:"
-          echo "---------------------------------------"
-          cat ~/.netrc
-          echo "---------------------------------------"
-
       - name: Assert netrc correct
         shell: bash
         run: |
