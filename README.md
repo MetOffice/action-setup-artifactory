@@ -19,6 +19,8 @@ Usage
   with:
     # Artifactory username. This is usually a user/team email address
     # Default: ${{ secrets.ART_USER}}
+	# Note: For Artifactory Access Tokens (no associated username) do not specify
+	# this field or leave it blank 
     username: ''
 
     # Artifactory API key. This can be obtained by logging into Artifactory
@@ -63,6 +65,26 @@ jobs:
         with:
           username: ${{ secrets.USERNAME }}
           api-key: ${{ secrets.API_KEY }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install Package from Artifactory
+        run: pip install some-package-on-artifactory
+```
+
+Configure Artifactory using an **Access Token** (no associated username):
+```yaml
+jobs:
+  my-job:
+    steps:
+        # Specifying username and api key
+      - name: Set up Artifactory connection
+        uses: MetOffice/action-setup-artifactory@v1
+        with:
+          api-key: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v2
