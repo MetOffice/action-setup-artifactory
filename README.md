@@ -25,6 +25,11 @@ Usage
     # with either username/password or SSO.
     # Default: ${{ secrets.ART_KEY}}
     api-key: ''
+
+    # Optional flag to setup conda-forge as the default channel. This also
+    # removes the Anaconda "defaults" channel and sets strict channel priority.
+    # Default: false
+    setup-conda-forge: true/false
 ```
 
 Examples

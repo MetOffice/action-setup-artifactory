@@ -11,6 +11,11 @@ inputs:
     required: true
     default: $ART_KEY
 
+  setup-conda-forge:
+    description: Whether to set up conda-forge as a default channel in conda
+    required: false
+    default: false
+
 runs:
   using: "composite"
   steps:
@@ -34,6 +39,15 @@ runs:
             echo "INFO: Adding channel_alias to ~/.condarc"
             echo ${CHANNEL_ALIAS_STR} >> ~/.condarc
         fi
+
+    - name: Configure conda-forge channel
+      if: ${{ inputs.setup-conda-forge }}
+      shell: bash
+      run: |
+        conda config --add channels conda-forge
+        conda config --set channel_priority strict
+        conda config --remove channels defaults
+        conda config --show channels
 
     - name: Create pip file
       shell: bash
