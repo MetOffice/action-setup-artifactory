@@ -58,9 +58,9 @@ jobs:
         #uses: MetOffice/action-setup-artifactory@main
         uses: MetOffice/action-setup-artifactory@optional_username
         with:
-          api-key: ${{ env.ART_TOKEN }}
+          api-key: ${{ secrets.art_access_token }}
 
-      - name: Assert netrc correct
+      - name: Assert netrc looks correct
         shell: bash
         run: |
           if (( $(cat ~/.netrc | wc -l) != 2 )); then
@@ -77,6 +77,14 @@ jobs:
             echo "Missing correct 'machine' field from ~/.netrc file."
           fi
 
-          if ! grep -e "\<password\> *${{ env.ART_TOKEN }}" ~/.netrc; then
+          if ! grep -e "\<password\> *${{ secrets.ART_ACCESS_TOKEN }}" ~/.netrc; then
             echo "Missing correct 'password' field from ~/.netrc file."
           fi
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install Package
+        run: pip install cloudteam-pythontools
