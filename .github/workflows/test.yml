@@ -1,6 +1,5 @@
 name: Test
 on:
-  pull_request:
   push:
     branches:
       - main
@@ -14,8 +13,7 @@ jobs:
       ART_KEY: ${{ secrets.art_key }}
     steps:
       - name: Run action
-        #uses: MetOffice/action-setup-artifactory@main
-        uses: MetOffice/action-setup-artifactory@setup-conda-forge
+        uses: MetOffice/action-setup-artifactory@main
         with:
           username: $ART_USER
           api-key: $ART_KEY
@@ -37,8 +35,7 @@ jobs:
       ART_KEY: ${{ secrets.art_key }}
     steps:
       - name: Run action
-        #uses: MetOffice/action-setup-artifactory@main
-        uses: MetOffice/action-setup-artifactory@setup-conda-forge
+        uses: MetOffice/action-setup-artifactory@main
 
       - name: Setup Python
         uses: actions/setup-python@v2
