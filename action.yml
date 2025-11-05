@@ -47,7 +47,13 @@ runs:
       run: |
         conda config --add channels conda-forge
         conda config --set channel_priority strict
-        conda config --remove channels defaults
+        # Remove any channels that are not conda-forge:
+        channels=$(conda config --show channels --json | jq -r '.channels[]')
+        for channel in $channels; do
+          if [ "$channel" != "conda-forge" ]; then
+            conda config --system --remove channels $channel
+          fi
+        done
         conda config --show channels
 
     - name: Create pip file
