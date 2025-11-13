@@ -98,7 +98,7 @@ jobs:
           conda config --show channels
 
       - name: Run action
-        uses: MetOffice/action-setup-artifactory@main
+        uses: MetOffice/action-setup-artifactory@default_channel_check
         with:
           username: ${{ secrets.art_user }}
           api-key: ${{ secrets.art_key }}
