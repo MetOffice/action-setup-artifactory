@@ -1,5 +1,6 @@
 name: Test
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -17,7 +18,6 @@ jobs:
         with:
           username: $ART_USER
           api-key: $ART_KEY
-          setup-conda-forge: true
 
       - name: Setup Python
         uses: actions/setup-python@v2
@@ -74,6 +74,59 @@ jobs:
           if ! grep -e "\<password\> *${{ secrets.ART_ACCESS_TOKEN }}" ~/.netrc; then
             echo "Missing correct 'password' field from ~/.netrc file."
           fi
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install Package
+        run: pip install cloudteam-pythontools
+
+  test-conda-forge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Add 'defaults' and conda-mo-internal channels to conda config
+        shell: bash
+        run: |
+          conda config --add channels conda-main
+          conda config --add channels conda-free
+          conda config --add channels conda-r
+          conda config --add channels defaults
+          conda config --add channels conda-mo-internal
+          conda config --show channels
+
+      - name: Run action
+        uses: MetOffice/action-setup-artifactory@main
+        with:
+          username: ${{ secrets.art_user }}
+          api-key: ${{ secrets.art_key }}
+          setup-conda-forge: true
+
+      - name: Assert netrc looks correct
+        shell: bash
+        run: |
+          DEFAULT_CHANNELS="conda-main conda-free conda-r defaults"
+          EXPECTED_CHANNELS="conda-forge conda-mo-internal"
+
+          CHANNELS=$(conda config --show channels --json | jq -r '.channels[]')
+
+          # Check default channels have been removed:
+          for DEFAULT in ${DEFAULT_CHANNELS}; do
+            if echo "${CHANNELS}" | grep -x -q "\<${DEFAULT}\>" ; then
+                echo "Found unexpected default channel '${DEFAULT}' in conda channels list."
+                exit 1
+            fi
+          done
+
+          # check expected channels are still present:
+          for EXPECTED in ${EXPECTED_CHANNELS}; do
+            if ! echo "${CHANNELS}" | grep -x -q "\<${EXPECTED}\>" ; then
+              echo "Missing '${EXPECTED}' channel in conda channel list."
+              exit 1
+            fi
+          done
 
       - name: Setup Python
         uses: actions/setup-python@v2
