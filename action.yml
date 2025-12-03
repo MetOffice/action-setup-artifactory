@@ -24,7 +24,7 @@ runs:
       run: |
         echo "machine metoffice.jfrog.io" >> ~/.netrc
         # If username is empty don't add login entry to .netrc (assumes Access Token):
-        if [[ -s ${{ inputs.username }} ]]; then
+        if [[ -s "${{ inputs.username }}" ]]; then
           echo "  login ${{ inputs.username }}" >> ~/.netrc
         fi
         echo "  password ${{ inputs.api-key }}" >> ~/.netrc
