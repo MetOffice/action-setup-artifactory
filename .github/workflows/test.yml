@@ -75,13 +75,20 @@ jobs:
             echo "Missing correct 'password' field from ~/.netrc file."
           fi
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.8"
+      - name: Test using conda forge
+        shell: bash
+        run: |
+          conda info
+          conda create -n test python==3.12
+          conda list -n test --explicit
+          
+      # - name: Setup Python
+      #   uses: actions/setup-python@v6
+      #   with:
+      #     python-version: "3.8"
 
-      - name: Install Package
-        run: pip install cloudteam-pythontools
+      # - name: Install Package
+      #   run: pip install cloudteam-pythontools
 
   test-conda-forge:
     runs-on: ubuntu-latest
