@@ -14,13 +14,13 @@ jobs:
       ART_KEY: ${{ secrets.art_key }}
     steps:
       - name: Run action
-        uses: MetOffice/action-setup-artifactory@main
+        uses: MetOffice/action-setup-artifactory@test
         with:
           username: $ART_USER
           api-key: $ART_KEY
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
           python-version: "3.8"
 
@@ -35,10 +35,10 @@ jobs:
       ART_KEY: ${{ secrets.art_key }}
     steps:
       - name: Run action
-        uses: MetOffice/action-setup-artifactory@main
+        uses: MetOffice/action-setup-artifactory@test
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
           python-version: "3.8"
 
@@ -50,7 +50,7 @@ jobs:
     timeout-minutes: 4
     steps:
       - name: Run action
-        uses: MetOffice/action-setup-artifactory@main
+        uses: MetOffice/action-setup-artifactory@test
         with:
           api-key: ${{ secrets.art_access_token }}
 
@@ -75,13 +75,20 @@ jobs:
             echo "Missing correct 'password' field from ~/.netrc file."
           fi
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
+      - name: Test using conda forge
+        shell: bash
+        run: |
+          conda info
+          conda create -n test python==3.12
+          conda list -n test --explicit
+          
+      # - name: Setup Python
+      #   uses: actions/setup-python@v6
+      #   with:
+      #     python-version: "3.8"
 
-      - name: Install Package
-        run: pip install cloudteam-pythontools
+      # - name: Install Package
+      #   run: pip install cloudteam-pythontools
 
   test-conda-forge:
     runs-on: ubuntu-latest
@@ -98,7 +105,7 @@ jobs:
           conda config --show channels
 
       - name: Run action
-        uses: MetOffice/action-setup-artifactory@main
+        uses: MetOffice/action-setup-artifactory@test
         with:
           username: ${{ secrets.art_user }}
           api-key: ${{ secrets.art_key }}
@@ -129,7 +136,7 @@ jobs:
           done
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
           python-version: "3.8"
 
