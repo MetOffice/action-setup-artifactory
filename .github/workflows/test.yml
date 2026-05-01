@@ -20,7 +20,7 @@ jobs:
           api-key: $ART_KEY
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
           python-version: "3.8"
 
@@ -38,7 +38,7 @@ jobs:
         uses: MetOffice/action-setup-artifactory@test
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
           python-version: "3.8"
 
@@ -76,7 +76,7 @@ jobs:
           fi
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
           python-version: "3.8"
 
@@ -129,7 +129,7 @@ jobs:
           done
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
           python-version: "3.8"
 
