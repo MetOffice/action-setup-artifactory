@@ -51,41 +51,38 @@ runs:
       run: |
         DEFAULT_CHANNELS="conda-main conda-free conda-r defaults"
 
+        # Commands for conda/miniconda and mamba/micromamba are subtely different,
+        # so check which is installed and use the appropriate commands:
+
         if [ -n "${CONDA_EXE:-}" ]; then
-          # Add the conda-main channel:
-          ${CONDA_EXE} config --add channels conda-forge
-          ${CONDA_EXE} config --set channel_priority strict
-
-          # Remove any Anaconda "defaults" channels:
-          CHANNELS=$(${CONDA_EXE} config --show channels --json | jq -r '.channels[]')
-          for DEFAULT in ${DEFAULT_CHANNELS}; do
-            if echo "${CHANNELS}" | grep -q -x "\<${DEFAULT}\>" ; then
-              # Make sure we remove from both system and user configs:
-              ${CONDA_EXE} config --system --remove channels ${DEFAULT} 2> /dev/null || true
-              ${CONDA_EXE} config --remove channels ${DEFAULT} 2> /dev/null || true
-            fi
-          done
-          ${CONDA_EXE} config --show channels
-
+          CMD_LIST_CHANNELS="${CONDA_EXE} config --show channels"
+          CMD_ADD_CHANNEL="${CONDA_EXE} config --add channels"
+          CMD_REM_CHANNEL="${CONDA_EXE} config --remove channels"
+          CMD_CONFIG_SET="${CONDA_EXE} config --set"
         elif [ -n "${MAMBA_EXE:-}" ]; then
-          # Add the conda-main channel:
-          ${MAMBA_EXE} config append channels conda-forge
-          ${MAMBA_EXE} config set channel_priority strict
-
-          # Remove any Anaconda "defaults" channels:
-          CHANNELS=$(conda config list channels --json | jq -r '.channels[]')
-          for DEFAULT in ${DEFAULT_CHANNELS}; do
-            if echo "${CHANNELS}" | grep -q -x "\<${DEFAULT}\>" ; then
-              # Make sure we remove from both system and user configs:
-              ${MAMBA_EXE} config remove --system channels ${DEFAULT} 2> /dev/null || true
-              ${MAMBA_EXE} config remove channels ${DEFAULT} 2> /dev/null || true
-            fi
-          done
-          ${MAMBA_EXE} config list channels
+          CMD_LIST_CHANNELS="${MAMBA_EXE} config list channels"
+          CMD_ADD_CHANNEL="${MAMBA_EXE} config append channels"
+          CMD_REM_CHANNEL="${MAMBA_EXE} config remove channels"
+          CMD_CONFIG_SET="${MAMBA_EXE} config set"
         else
           echo "FAIL: You don't appear to have either conda/miniconda or micromamba installed"
           exit 1
         fi
+
+        # Add the conda-forge channel:
+        ${CMD_ADD_CHANNEL} conda-forge
+        ${CMD_CONFIG_SET} channel_priority strict
+
+        # Remove any Anaconda "defaults" channels:
+        CHANNELS=$(${CMD_LIST_CHANNELS} --json | jq -r '.channels[]')
+        for DEFAULT in ${DEFAULT_CHANNELS}; do
+          if echo "${CHANNELS}" | grep -q -x "\<${DEFAULT}\>" ; then
+            # Make sure we remove from both system and user configs:
+            ${CMD_REM_CHANNEL} --system ${DEFAULT} 2> /dev/null || true
+            ${CMD_REM_CHANNEL} ${DEFAULT} 2> /dev/null || true
+          fi
+        done
+        ${CMD_LIST_CHANNELS}
 
     - name: Create pip file
       shell: bash
