@@ -18,9 +18,9 @@ jobs:
           username: ${{ secrets.art_user }}
           api-key: ${{ secrets.art_key }}
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.8"
+          python-version: "3.12"
       - name: Install Package
         run: pip install cloudteam-pythontools
 
@@ -35,9 +35,9 @@ jobs:
           api-key: ${{ secrets.art_key }}
           check-creds: true
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.8"
+          python-version: "3.12"
       - name: Install Package
         run: pip install cloudteam-pythontools
 
@@ -73,9 +73,9 @@ jobs:
           fi
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.8"
+          python-version: "3.12"
 
       - name: Install Package
         run: pip install cloudteam-pythontools
@@ -126,9 +126,9 @@ jobs:
           done
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.8"
+          python-version: "3.12"
 
       - name: Install Package
         run: pip install cloudteam-pythontools
@@ -145,9 +145,11 @@ jobs:
         with:
           username: ${{ secrets.art_user }}
           api-key: ${{ secrets.art_key }}
+          check-creds: true
+          setup-conda-forge: true
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.8"
+          python-version: "3.12"
       - name: Install Package
         run: pip install cloudteam-pythontools

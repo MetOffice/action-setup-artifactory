@@ -55,11 +55,13 @@ runs:
         # so check which is installed and use the appropriate commands:
 
         if command -v conda >/dev/null 2>&1; then
+          echo "Using conda/miniconda commands"
           CMD_LIST_CHANNELS="conda config --show channels"
           CMD_ADD_CHANNEL="conda config --add channels"
           CMD_REM_CHANNEL="conda config --remove channels"
           CMD_CONFIG_SET="conda config --set"
         elif [ -n "${MAMBA_EXE:-}" ]; then
+          echo "Using mamba/micromamba commands"
           CMD_LIST_CHANNELS="${MAMBA_EXE} config list channels"
           CMD_ADD_CHANNEL="${MAMBA_EXE} config append channels"
           CMD_REM_CHANNEL="${MAMBA_EXE} config remove channels"
@@ -74,14 +76,19 @@ runs:
         ${CMD_CONFIG_SET} channel_priority strict
 
         # Remove any Anaconda "defaults" channels:
+        echo "Current channels:"
+        ${CMD_LIST_CHANNELS}
+
         CHANNELS=$(${CMD_LIST_CHANNELS} --json | jq -r '.channels[]')
         for DEFAULT in ${DEFAULT_CHANNELS}; do
           if echo "${CHANNELS}" | grep -q -x "\<${DEFAULT}\>" ; then
             # Make sure we remove from both system and user configs:
-            ${CMD_REM_CHANNEL} --system ${DEFAULT} 2> /dev/null || true
-            ${CMD_REM_CHANNEL} ${DEFAULT} 2> /dev/null || true
+            ${CMD_REM_CHANNEL} --system ${DEFAULT} || true
+            ${CMD_REM_CHANNEL} ${DEFAULT} || true
           fi
         done
+
+        echo "Updated channels:"
         ${CMD_LIST_CHANNELS}
 
     - name: Create pip file
