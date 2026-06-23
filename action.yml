@@ -81,7 +81,7 @@ runs:
               ${MAMBA_EXE} config remove channels ${DEFAULT} 2> /dev/null || true
             fi
           done
-          ${MAMBA_EXE} config --show channels
+          ${MAMBA_EXE} config list channels
         else
           echo "FAIL: You don't appear to have either conda/miniconda or micromamba installed"
           exit 1
