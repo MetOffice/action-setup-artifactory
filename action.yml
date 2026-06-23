@@ -51,7 +51,7 @@ runs:
       run: |
         DEFAULT_CHANNELS="conda-main conda-free conda-r defaults"
 
-        if [ -n "CONDA_EXE" ]; then
+        if [ -n "${CONDA_EXE:-}" ]; then
           # Add the conda-main channel:
           ${CONDA_EXE} config --add channels conda-forge
           ${CONDA_EXE} config --set channel_priority strict
@@ -67,7 +67,7 @@ runs:
           done
           ${CONDA_EXE} config --show channels
 
-        elif [ -n "MAMBA_EXE" ]; then
+        elif [ -n "${MAMBA_EXE:-}" ]; then
           # Add the conda-main channel:
           ${MAMBA_EXE} config append channels conda-forge
           ${MAMBA_EXE} config set channel_priority strict
