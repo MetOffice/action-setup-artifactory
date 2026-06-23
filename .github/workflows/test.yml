@@ -139,16 +139,8 @@ jobs:
     steps:
       - name: Install micromamba
         uses: mamba-org/setup-micromamba@d7c9bd84e824b79d2af72a2d4196c7f4300d3476  # v3.0.0
-
-      - name: Add 'defaults' and conda-mo-internal channels to conda config
-        shell: bash
-        run: |
-          micromamba config append channels conda-main
-          micromamba config append channels conda-free
-          micromamba config append channels conda-r
-          micromamba config append channels defaults
-          micromamba config append channels conda-mo-internal
-          micromamba config list channels
+        with:
+          channels: conda-forge,conda-main,conda-free,conda-r,defaults,conda-mo-internal
 
       - name: Run action
         uses: MetOffice/action-setup-artifactory@support-micromamba
