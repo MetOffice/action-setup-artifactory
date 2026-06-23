@@ -54,11 +54,11 @@ runs:
         # Commands for conda/miniconda and mamba/micromamba are subtely different,
         # so check which is installed and use the appropriate commands:
 
-        if [ -n "${CONDA_EXE:-}" ]; then
-          CMD_LIST_CHANNELS="${CONDA_EXE} config --show channels"
-          CMD_ADD_CHANNEL="${CONDA_EXE} config --add channels"
-          CMD_REM_CHANNEL="${CONDA_EXE} config --remove channels"
-          CMD_CONFIG_SET="${CONDA_EXE} config --set"
+        if command -v conda >/dev/null 2>&1; then
+          CMD_LIST_CHANNELS="conda config --show channels"
+          CMD_ADD_CHANNEL="conda config --add channels"
+          CMD_REM_CHANNEL="conda config --remove channels"
+          CMD_CONFIG_SET="conda config --set"
         elif [ -n "${MAMBA_EXE:-}" ]; then
           CMD_LIST_CHANNELS="${MAMBA_EXE} config list channels"
           CMD_ADD_CHANNEL="${MAMBA_EXE} config append channels"
