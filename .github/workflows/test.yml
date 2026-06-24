@@ -140,7 +140,14 @@ jobs:
       - name: Install micromamba
         uses: mamba-org/setup-micromamba@d7c9bd84e824b79d2af72a2d4196c7f4300d3476  # v3.0.0
         with:
-          channels: conda-forge,conda-main,conda-free,conda-r,defaults,conda-mo-internal
+          condarc: |
+            channels:
+              - conda-forge
+              - conda-main
+              - conda-free
+              - conda-r
+              - defaults
+              - conda-mo-internal
 
       - name: Run action
         uses: MetOffice/action-setup-artifactory@support-micromamba
