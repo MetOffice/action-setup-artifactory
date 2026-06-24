@@ -109,10 +109,17 @@ jobs:
 
           CHANNELS=$(conda config --show channels --json | jq -r '.channels[]')
 
+          echo "[INFO] Conda channels list:"
+          echo "${CHANNELS}"
+          echo "[INFO] ~/.condarc"
+          cat ~/.condarc
+          echo "[INFO] conda config sources:"  
+          conda config --show-sources        
+
           # Check default channels have been removed:
           for DEFAULT in ${DEFAULT_CHANNELS}; do
             if echo "${CHANNELS}" | grep -x -q "\<${DEFAULT}\>" ; then
-                echo "Found unexpected default channel '${DEFAULT}' in conda channels list."
+                echo "[FAIL] Found unexpected default channel '${DEFAULT}' in conda channels list."
                 exit 1
             fi
           done
@@ -120,7 +127,7 @@ jobs:
           # check expected channels are still present:
           for EXPECTED in ${EXPECTED_CHANNELS}; do
             if ! echo "${CHANNELS}" | grep -x -q "\<${EXPECTED}\>" ; then
-              echo "Missing '${EXPECTED}' channel in conda channel list."
+              echo "[FAIL] Missing '${EXPECTED}' channel in conda channel list."
               exit 1
             fi
           done
