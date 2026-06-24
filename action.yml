@@ -49,6 +49,9 @@ runs:
       if: ${{ inputs.setup-conda-forge == 'true' }}
       shell: bash
       run: |
+        micromamba info
+        micromamba config sources
+        exit 0
         DEFAULT_CHANNELS="conda-main conda-free conda-r defaults"
 
         # Commands for conda/miniconda and mamba/micromamba are subtely different,
