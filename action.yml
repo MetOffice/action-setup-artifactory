@@ -42,6 +42,9 @@ runs:
           SOURCES="${SOURCES} ${HOME}/.condarc"
         fi
 
+        # Sanitize (replace ~ with $HOME):
+        SOURCES=$(echo "${SOURCES}" | sed "s/~/${HOME}/g")
+
         echo "The following condarc sources will be updated:"
         echo "${SOURCES}"
 
@@ -89,14 +92,14 @@ runs:
             echo "INFO: conda-forge channel already present in ${CONDARC_FILE}"
           else
             echo "INFO: Adding conda-forge channel to ${CONDARC_FILE}"
-            yq -i -Y '.channels = ["conda-forge"] + .channels' ${CONDARC_FILE}
+            yq -i '.channels = ["conda-forge"] + .channels' ${CONDARC_FILE}
           fi
 
           # remove any of the defaults channels from the config file:
           for DEFAULT in ${DEFAULT_CHANNELS}; do
             if yq -e --arg DEFAULT "${DEFAULT}" '.channels | index($DEFAULT)' ${CONDARC_FILE} >/dev/null 2>&1; then
               echo "INFO: Removing default channel ${DEFAULT} from ${CONDARC_FILE}"
-              yq -i -Y --arg DEFAULT "${DEFAULT}" '.channels |= map(select(. != $DEFAULT))' ${CONDARC_FILE}
+              yq -i --arg DEFAULT "${DEFAULT}" '.channels |= map(select(. != $DEFAULT))' ${CONDARC_FILE}
             fi
           done
         done
