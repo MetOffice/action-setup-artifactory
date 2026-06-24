@@ -62,10 +62,11 @@ runs:
           CMD_CONFIG_SET="conda config --set"
         elif [ -n "${MAMBA_EXE:-}" ]; then
           echo "Using mamba/micromamba commands"
-          CMD_LIST_CHANNELS="${MAMBA_EXE} config list channels"
-          CMD_ADD_CHANNEL="${MAMBA_EXE} config append channels"
-          CMD_REM_CHANNEL="${MAMBA_EXE} config remove channels"
-          CMD_CONFIG_SET="${MAMBA_EXE} config set"
+          MAMBA_CONFIG_CMD="${MAMBA_EXE} config --rc-file=${CONDARC}"
+          CMD_LIST_CHANNELS="${MAMBA_CONFIG_CMD} list channels"
+          CMD_ADD_CHANNEL="${MAMBA_CONFIG_CMD} append channels"
+          CMD_REM_CHANNEL="${MAMBA_CONFIG_CMD} remove channels"
+          CMD_CONFIG_SET="${MAMBA_CONFIG_CMD} set"
         else
           echo "FAIL: You don't appear to have either conda/miniconda or micromamba installed"
           exit 1
