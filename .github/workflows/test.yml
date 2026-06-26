@@ -174,4 +174,5 @@ jobs:
         shell: bash
 
       - name: Install Package
-        run: pip install cloudteam-pythontools
+        shell: bash
+        run: micromamba create -n test-env --no-deps zlib
