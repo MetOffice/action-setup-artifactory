@@ -27,23 +27,35 @@ runs:
     - name: Get condarc locations
       shell: bash
       run: |
-        # Get condarc file sources
+        # Get condarc file sources, as reported by the tooling.
+        # We need to do this as:
+        #   1. Not all tools default to using ~/.condarc, e.g. the setup-micromamba action
+        #      uses a different location for its configuration file.
+        #   2. There may be several configuration files, e.g. a system-wide configuration file,
+        #      and a user configuration file.
+        # The best way to get the list of configuration files is to ask the tooling itself.
         SOURCES=""
 
+        # Check if conda is installed and get its config sources
         if command -v conda >/dev/null 2>&1; then
-          # The JSON output of Conda config includes "cmd_line" as a source and
-          # some other YML files, so just keep the ones that look like condarc files.
+          # The JSON output of Conda config includes some files that are not condarc files.
+          # We filter these out:
+          #  - `jq -r 'keys[]'` : gets the keys of the JSON object, which are the file paths
+          #  - `egrep '/\.?condarc$'` : filters to only include paths that end with .condarc or condarc
           SOURCES="${SOURCES} $(conda config --show-sources --json | jq -r 'keys[]' | egrep '/\.?condarc$')"
           echo "Added Conda CONDARC: ${SOURCES}"
         fi
 
+        # Check if micromamba is installed and get its config sources
         if [ -n "${MAMBA_EXE}" ]; then
-          # Mamba is likely to setup its own condarc file:
+          # Micromamba doesn't have a nice JSON output, so we just take the output of
+          # the `config sources` command and skip the first line (which is a header):
           SOURCES="${SOURCES} $(${MAMBA_EXE} config sources | tail -n+2)"
-
         fi
 
-        # Sanitize: replace ~ with $HOME and get rid of newlines:
+        # Sanitize: replace `~` with `$HOME` and get rid of newlines:
+        #  - `sed "s|~|${HOME}|g"` : replaces ~ with the value of $HOME
+        #  - `tr '\n' ' '` : replaces newlines with spaces
         SOURCES=$(echo "${SOURCES}" | sed "s|~|${HOME}|g" | tr '\n' ' ')
 
         # add user ${HOME}/.condarc, if it exists and not already present:
@@ -72,6 +84,10 @@ runs:
       shell: bash
       run: |
         # Configure the condarc file
+        # We do this by modifying the condarc files directly rather than using 
+        # `conda config` or `micromamba config` commands, as these commands don't always
+        # modify the correct condarc file when writing configuration files compared to 
+        # reading them. This is particularly true for the micromamba.
         if ${{ inputs.setup-conda-forge }}; then
           FLAGS="--setup-conda-forge"
         fi
@@ -97,16 +113,17 @@ runs:
       run: |
         # Check Artifactory authentication
         echo "Testing authentication to Artifactory"
-        # Check  and capture numerical status code
+
+        # Check and capture numerical status code
         url="https://metoffice.jfrog.io/metoffice/api/conda/conda-forge"
         status=$(curl -n -I --write-out %{http_code} --silent --output /dev/null ${url}) 
-        echo "MO JFrog Artifactory returned: ${status}"
+
         # if connection and authentication work, then expect a 200 code
         if [ $status != "200" ]; then
-        # connection or authentication problems
-        echo "Check authentication file, password expiry or user settings"
-        exit 1
+          # connection or authentication problems
+          echo "Check authentication file, password expiry or user settings"
+          exit 1
         else
-        echo "Server returned: ${status}"
-        echo "Artifactory connection ok, continuing"
+          echo "Server returned: ${status}"
+          echo "Artifactory connection ok, continuing"
         fi
