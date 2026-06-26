@@ -66,30 +66,38 @@ runs:
         fi
         echo "  password ${{ inputs.api-key }}" >> ~/.netrc
 
-    - name: Add the conda channel_alias for Artifactory
+    # - name: Add the conda channel_alias for Artifactory
+    #   shell: bash
+    #   run: |
+
+    #     CHANNEL_ALIAS_STR="https://metoffice.jfrog.io/metoffice/api/conda"
+    #     for CONDARC_FILE in ${CONDARC_SOURCES}; do
+    #       # if grep "^channel_alias" ${CONDARC_FILE} 2>/dev/null; then
+    #       #   echo "INFO: channel_alias already present in ${CONDARC_FILE}"
+    #       #yq -e ".channel_alias == \"${CHANNEL_ALIAS_STR}\"" ${CONDARC_FILE} 
+    #       if yq -e ".channel_alias == \"${CHANNEL_ALIAS_STR}\"" ${CONDARC_FILE} >/dev/null 2>&1; then
+    #         echo "INFO: channel_alias already present in ${CONDARC_FILE}"
+    #       else
+    #         echo "INFO: Adding channel_alias to ${CONDARC_FILE}"
+    #         #echo ${CHANNEL_ALIAS_STR} >> ${CONDARC_FILE}
+    #         yq -i ".channel_alias = \"${CHANNEL_ALIAS_STR}\"" ${CONDARC_FILE}
+    #       fi
+    #     done
+
+    # - name: Configure conda-forge channel
+    #   if: ${{ inputs.setup-conda-forge == 'true' }}
+    #   shell: bash
+    #   run: |
+    #     export DEFAULT_CHANNELS="conda-main conda-free conda-r defaults"
+    #     ${{ github.action_path }}/update-condarc.sh
+
+    - name: Configure the condarc file
       shell: bash
       run: |
-
-        CHANNEL_ALIAS_STR="https://metoffice.jfrog.io/metoffice/api/conda"
-        for CONDARC_FILE in ${CONDARC_SOURCES}; do
-          # if grep "^channel_alias" ${CONDARC_FILE} 2>/dev/null; then
-          #   echo "INFO: channel_alias already present in ${CONDARC_FILE}"
-          #yq -e ".channel_alias == \"${CHANNEL_ALIAS_STR}\"" ${CONDARC_FILE} 
-          if yq -e ".channel_alias == \"${CHANNEL_ALIAS_STR}\"" ${CONDARC_FILE} >/dev/null 2>&1; then
-            echo "INFO: channel_alias already present in ${CONDARC_FILE}"
-          else
-            echo "INFO: Adding channel_alias to ${CONDARC_FILE}"
-            #echo ${CHANNEL_ALIAS_STR} >> ${CONDARC_FILE}
-            yq -i ".channel_alias = \"${CHANNEL_ALIAS_STR}\"" ${CONDARC_FILE}
-          fi
-        done
-
-    - name: Configure conda-forge channel
-      if: ${{ inputs.setup-conda-forge == 'true' }}
-      shell: bash
-      run: |
-        export DEFAULT_CHANNELS="conda-main conda-free conda-r defaults"
-        ${{ github.action_path }}/update-condarc.sh
+        if ${{ inputs.setup-conda-forge }}; then
+          FLAGS="--setup-conda-forge"
+        fi
+        python ${{ github.action_path }}/update_condarc.py ${FLAGS:-}
 
     - name: Create pip configuration file
       shell: bash
