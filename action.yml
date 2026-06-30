@@ -93,7 +93,7 @@ runs:
         fi
         for CONDARC_FILE in ${CONDARC_SOURCES}; do
           echo "INFO: Updating ${CONDARC_FILE}"
-          python ${{ github.action_path }}/update_condarc.py ${CONDARC_FILE} ${FLAGS:-}
+          python3 "${{ github.action_path }}/update_condarc.py" "${CONDARC_FILE}" ${FLAGS:-}
         done
 
     - name: Create pip configuration file
