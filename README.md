@@ -25,9 +25,10 @@ and updated at ``${HOME}/.condarc``.
    - Setup **micromamba** prior to using this action using
      [mamba-org/setup-micromamba](https://github.com/marketplace/actions/setup-micromamba)
      in your workflow.
- - Adds option ``check-creds`` to assert that the supplied Artifactory credentials are valid.
+ - Adds option ``check-creds`` to assert that the supplied Artifactory credentials
+   are valid. Defaults to ``false``.
  - Adds option ``setup-conda-forge`` to add ``conda-forge`` as a channel and remove
-   any Anaconda **default** channels.
+   any Anaconda **default** channels. Defaults to ``false``.
 
 
 ### v1
