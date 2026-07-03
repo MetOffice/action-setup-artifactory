@@ -7,11 +7,11 @@ inputs:
     required: false  # Note `required` doesn't actually do anything: https://github.com/actions/runner/issues/1070
 
   api-key:
-    description: Artifactory API key
+    description: Artifactory API key or Identity Token
     required: true
 
   check-creds:
-    description: Optional check credentials status
+    description: Whether to check credentials validity
     required: true
     default: false
 
