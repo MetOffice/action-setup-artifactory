@@ -26,7 +26,7 @@ and updated at ``${HOME}/.condarc``.
      [mamba-org/setup-micromamba](https://github.com/marketplace/actions/setup-micromamba)
      in your workflow.
  - Adds option ``check-creds`` to assert that the supplied Artifactory credentials
-   are valid. Defaults to ``false``.
+   are valid. Defaults to ``true``.
  - Adds option ``setup-conda-forge`` to add ``conda-forge`` as a channel and remove
    any Anaconda **default** channels. Defaults to ``false``.
 
@@ -52,7 +52,7 @@ and updated at ``${HOME}/.condarc``.
 
     # Authentication credentials check.
     # Confirms that username and api-key are active and working.
-    # Default: false
+    # Default: true
     check-creds: true/false
 
     # Optional flag to use ``conda-forge`` as a conda channel in preference to the
@@ -79,7 +79,6 @@ jobs:
         with:
           username: ${{ secrets.USERNAME }}
           api-key: ${{ secrets.API_KEY }}
-          check-creds: true
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -100,7 +99,6 @@ jobs:
         uses: MetOffice/action-setup-artifactory@v2
         with:
           api-key: ${{ secrets.ACCESS_TOKEN }}
-          check-creds: true
 
       - name: Set up Python
         uses: actions/setup-python@v6

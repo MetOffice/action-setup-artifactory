@@ -13,7 +13,7 @@ inputs:
   check-creds:
     description: Whether to check credentials validity
     required: true
-    default: false
+    default: true
 
   setup-conda-forge:
     description: Add conda-forge as a channel in preference to Anaconda defaults
