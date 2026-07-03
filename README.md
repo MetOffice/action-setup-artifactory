@@ -14,7 +14,7 @@ Note
 ----
 
 If no Conda configuration files (``**/.condarc``) are found, one will be created
-and updated in the ``${HOME}/.condarc``.
+and updated at ``${HOME}/.condarc``.
 
 
 ## Whats New
