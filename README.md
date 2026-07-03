@@ -26,7 +26,7 @@ and updated at ``${HOME}/.condarc``.
      [mamba-org/setup-micromamba](https://github.com/marketplace/actions/setup-micromamba)
      in your workflow.
  - Adds option ``check-creds`` to assert that the supplied Artifactory credentials are valid.
- - Adds option ``setup-conda-forge`` to add ``conda-forge`` as a chanel and remove
+ - Adds option ``setup-conda-forge`` to add ``conda-forge`` as a channel and remove
    any Anaconda **default** channels.
 
 
