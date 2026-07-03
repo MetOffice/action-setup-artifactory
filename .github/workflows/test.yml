@@ -17,6 +17,7 @@ jobs:
         with:
           username: ${{ secrets.art_user }}
           api-key: ${{ secrets.art_key }}
+          check-creds: false
       - name: Setup Python
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
@@ -99,6 +100,7 @@ jobs:
           username: ${{ secrets.art_user }}
           api-key: ${{ secrets.art_key }}
           setup-conda-forge: true
+          check-creds: false
 
       - name: Assert netrc looks correct
         shell: bash
