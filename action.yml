@@ -129,9 +129,9 @@ runs:
         # if connection and authentication work, then expect a 200 code
         if [ $status != "200" ]; then
           # connection or authentication problems
-          echo "Check authentication file, password expiry or user settings"
+          echo "Artifactory could not be accessed. Check authentication file, token expiry or user settings"
           exit 1
         else
           echo "Server returned: ${status}"
-          echo "Artifactory connection ok, continuing"
+          echo "Artifactory accessible, continuing"
         fi
