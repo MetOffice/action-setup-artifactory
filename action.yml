@@ -95,7 +95,7 @@ runs:
       shell: bash
       env:
         setup_conda_forge: ${{ inputs.setup-conda-forge }}
-        actions_path: ${{ github.action_path }}
+        action_path: ${{ github.action_path }}
       run: |
         # Configure the condarc file
         # We do this by modifying the condarc files directly rather than using 
