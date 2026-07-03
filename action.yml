@@ -129,6 +129,5 @@ runs:
           echo "Check authentication file, password expiry or user settings"
           exit 1
         else
-          echo "Server returned: ${status}"
           echo "Artifactory connection ok, continuing"
         fi
