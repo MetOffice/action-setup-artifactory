@@ -129,6 +129,5 @@ runs:
           echo "Artifactory could not be accessed. Check authentication file, token expiry or user settings"
           exit 1
         else
-          echo "Server returned: ${status}"
           echo "Artifactory accessible, continuing"
         fi
