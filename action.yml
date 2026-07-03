@@ -122,12 +122,9 @@ runs:
         # Check Artifactory authentication
         echo "Testing authentication to Artifactory"
 
-        # Check and capture numerical status code
         url="https://metoffice.jfrog.io/metoffice/api/conda/conda-forge"
-        status=$(curl -n -I --write-out %{http_code} --silent --output /dev/null ${url}) 
-
-        # if connection and authentication work, then expect a 200 code
-        if [ $status != "200" ]; then
+        # If connection and authentication work, then expect a successful response.
+        if curl -n -I -sSf --silent --output /dev/null "${url}" ; then
           # connection or authentication problems
           echo "Check authentication file, password expiry or user settings"
           exit 1
